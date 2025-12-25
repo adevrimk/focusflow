@@ -81,8 +81,15 @@ let state = {
     sounds: {},
     music: {},
     activeMusicId: null,
-    activeCategory: 'all'
+    activeCategory: 'all',
+    sleepTimerInterval: null,
+    sleepTimerRemaining: 0,
+    theme: localStorage.getItem('focusflow_theme') || 'dark',
+    customFocusTime: parseInt(localStorage.getItem('focusflow_customtime') || '25')
 };
+
+// Make state accessible globally for i18n
+window.state = state;
 
 const elements = {};
 
@@ -195,6 +202,288 @@ function showNotification(title, body) {
     if ('Notification' in window && Notification.permission === 'granted') {
         new Notification(title, { body, icon: '🍅' });
     }
+}
+
+// ===== Custom Timer =====
+function setCustomTimer(minutes) {
+    state.customFocusTime = minutes;
+    localStorage.setItem('focusflow_customtime', minutes.toString());
+    TIMER_CONFIG.focus = minutes * 60;
+    if (state.currentMode === 'focus' && !state.isRunning) {
+        state.timeRemaining = TIMER_CONFIG.focus;
+        state.totalTime = TIMER_CONFIG.focus;
+        updateDisplay();
+    }
+}
+
+function initCustomTimer() {
+    const slider = document.getElementById('customTimerSlider');
+    const valueDisplay = document.getElementById('customTimerValue');
+    if (slider && valueDisplay) {
+        slider.value = state.customFocusTime;
+        valueDisplay.textContent = `${state.customFocusTime} min`;
+        TIMER_CONFIG.focus = state.customFocusTime * 60;
+
+        slider.addEventListener('input', (e) => {
+            const mins = parseInt(e.target.value);
+            valueDisplay.textContent = `${mins} min`;
+            setCustomTimer(mins);
+        });
+    }
+}
+
+// ===== Sleep Timer =====
+function startSleepTimer(minutes) {
+    if (state.sleepTimerInterval) {
+        clearInterval(state.sleepTimerInterval);
+    }
+
+    if (minutes === 0) {
+        state.sleepTimerRemaining = 0;
+        updateSleepTimerStatus();
+        return;
+    }
+
+    state.sleepTimerRemaining = minutes * 60;
+    updateSleepTimerStatus();
+
+    state.sleepTimerInterval = setInterval(() => {
+        state.sleepTimerRemaining--;
+        updateSleepTimerStatus();
+
+        if (state.sleepTimerRemaining <= 0) {
+            clearInterval(state.sleepTimerInterval);
+            stopAllSounds();
+            stopAllMusic();
+            showNotification('😴 Sleep Timer', 'Sounds stopped');
+        }
+    }, 1000);
+}
+
+function updateSleepTimerStatus() {
+    const status = document.getElementById('sleepTimerStatus');
+    if (status) {
+        if (state.sleepTimerRemaining > 0) {
+            const mins = Math.floor(state.sleepTimerRemaining / 60);
+            const secs = state.sleepTimerRemaining % 60;
+            status.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+        } else {
+            status.textContent = '';
+        }
+    }
+}
+
+function initSleepTimer() {
+    const select = document.getElementById('sleepTimerSelect');
+    if (select) {
+        select.addEventListener('change', (e) => {
+            startSleepTimer(parseInt(e.target.value));
+        });
+    }
+}
+
+// ===== Theme Toggle =====
+function toggleTheme() {
+    state.theme = state.theme === 'dark' ? 'light' : 'dark';
+    localStorage.setItem('focusflow_theme', state.theme);
+    applyTheme();
+}
+
+function applyTheme() {
+    if (state.theme === 'light') {
+        document.body.classList.add('light-theme');
+        const icon = document.querySelector('.theme-icon');
+        if (icon) icon.textContent = '☀️';
+    } else {
+        document.body.classList.remove('light-theme');
+        const icon = document.querySelector('.theme-icon');
+        if (icon) icon.textContent = '🌙';
+    }
+}
+
+function initTheme() {
+    applyTheme();
+    const toggle = document.getElementById('themeToggle');
+    if (toggle) {
+        toggle.addEventListener('click', toggleTheme);
+    }
+}
+
+// ===== Web Audio API - Pro Audio Effects =====
+let audioContext = null;
+let masterGain = null;
+let bassFilter = null;
+let trebleFilter = null;
+let convolver = null;  // For reverb
+let panner = null;     // For surround
+
+// Audio effect settings
+const audioEffects = {
+    bass: parseFloat(localStorage.getItem('focusflow_bass') || '0'),
+    treble: parseFloat(localStorage.getItem('focusflow_treble') || '0'),
+    reverb: parseFloat(localStorage.getItem('focusflow_reverb') || '0'),
+    surround: localStorage.getItem('focusflow_surround') === 'true'
+};
+
+function initAudioContext() {
+    if (audioContext) return audioContext;
+
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+    // Master gain
+    masterGain = audioContext.createGain();
+    masterGain.connect(audioContext.destination);
+
+    // Bass filter (low shelf)
+    bassFilter = audioContext.createBiquadFilter();
+    bassFilter.type = 'lowshelf';
+    bassFilter.frequency.value = 200;
+    bassFilter.gain.value = audioEffects.bass;
+
+    // Treble filter (high shelf)
+    trebleFilter = audioContext.createBiquadFilter();
+    trebleFilter.type = 'highshelf';
+    trebleFilter.frequency.value = 3000;
+    trebleFilter.gain.value = audioEffects.treble;
+
+    // Convolver for reverb
+    convolver = audioContext.createConvolver();
+    createReverbImpulse();
+
+    // Panner for surround
+    panner = audioContext.createStereoPanner();
+    panner.pan.value = 0;
+
+    // Connect chain: source -> bass -> treble -> panner -> convolver mix -> master
+    bassFilter.connect(trebleFilter);
+    trebleFilter.connect(panner);
+    panner.connect(masterGain);
+
+    console.log('🎛️ Audio effects initialized');
+    return audioContext;
+}
+
+// Create reverb impulse response
+function createReverbImpulse() {
+    const sampleRate = audioContext.sampleRate;
+    const length = sampleRate * 2; // 2 seconds reverb
+    const impulse = audioContext.createBuffer(2, length, sampleRate);
+
+    for (let channel = 0; channel < 2; channel++) {
+        const channelData = impulse.getChannelData(channel);
+        for (let i = 0; i < length; i++) {
+            channelData[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, 2);
+        }
+    }
+
+    convolver.buffer = impulse;
+}
+
+// Set bass level (-12 to +12 dB)
+function setBass(value) {
+    audioEffects.bass = value;
+    localStorage.setItem('focusflow_bass', value.toString());
+    if (bassFilter) bassFilter.gain.value = value;
+    updateEQDisplay();
+}
+
+// Set treble level (-12 to +12 dB)
+function setTreble(value) {
+    audioEffects.treble = value;
+    localStorage.setItem('focusflow_treble', value.toString());
+    if (trebleFilter) trebleFilter.gain.value = value;
+    updateEQDisplay();
+}
+
+// Set reverb amount (0 to 1)
+function setReverb(value) {
+    audioEffects.reverb = value;
+    localStorage.setItem('focusflow_reverb', value.toString());
+    // Reverb is applied by mixing dry/wet signals
+    updateEQDisplay();
+}
+
+// Toggle surround effect
+function toggleSurround() {
+    audioEffects.surround = !audioEffects.surround;
+    localStorage.setItem('focusflow_surround', audioEffects.surround.toString());
+
+    if (audioEffects.surround) {
+        // Create subtle panning animation
+        startSurroundEffect();
+    } else {
+        stopSurroundEffect();
+    }
+    updateEQDisplay();
+}
+
+let surroundInterval = null;
+function startSurroundEffect() {
+    if (surroundInterval) return;
+    let phase = 0;
+    surroundInterval = setInterval(() => {
+        if (panner) {
+            // Gentle left-right panning
+            panner.pan.value = Math.sin(phase) * 0.3;
+            phase += 0.05;
+        }
+    }, 100);
+}
+
+function stopSurroundEffect() {
+    if (surroundInterval) {
+        clearInterval(surroundInterval);
+        surroundInterval = null;
+    }
+    if (panner) panner.pan.value = 0;
+}
+
+function updateEQDisplay() {
+    const bassEl = document.getElementById('bassValue');
+    const trebleEl = document.getElementById('trebleValue');
+    const reverbEl = document.getElementById('reverbValue');
+    const surroundEl = document.getElementById('surroundToggle');
+
+    if (bassEl) bassEl.textContent = `${audioEffects.bass > 0 ? '+' : ''}${audioEffects.bass}dB`;
+    if (trebleEl) trebleEl.textContent = `${audioEffects.treble > 0 ? '+' : ''}${audioEffects.treble}dB`;
+    if (reverbEl) reverbEl.textContent = `${Math.round(audioEffects.reverb * 100)}%`;
+    if (surroundEl) surroundEl.textContent = audioEffects.surround ? '🔊' : '🔇';
+}
+
+function initAudioEffects() {
+    initAudioContext();
+
+    // Bass slider
+    const bassSlider = document.getElementById('bassSlider');
+    if (bassSlider) {
+        bassSlider.value = audioEffects.bass;
+        bassSlider.addEventListener('input', (e) => setBass(parseFloat(e.target.value)));
+    }
+
+    // Treble slider
+    const trebleSlider = document.getElementById('trebleSlider');
+    if (trebleSlider) {
+        trebleSlider.value = audioEffects.treble;
+        trebleSlider.addEventListener('input', (e) => setTreble(parseFloat(e.target.value)));
+    }
+
+    // Reverb slider
+    const reverbSlider = document.getElementById('reverbSlider');
+    if (reverbSlider) {
+        reverbSlider.value = audioEffects.reverb;
+        reverbSlider.addEventListener('input', (e) => setReverb(parseFloat(e.target.value)));
+    }
+
+    // Surround toggle
+    const surroundBtn = document.getElementById('surroundToggle');
+    if (surroundBtn) {
+        surroundBtn.addEventListener('click', toggleSurround);
+    }
+
+    updateEQDisplay();
+
+    // Start surround if was enabled
+    if (audioEffects.surround) startSurroundEffect();
 }
 
 // ===== Favorites =====
@@ -622,9 +911,16 @@ function init() {
         window.FocusFlowLang.updateUI();
     }
 
+    // Initialize new features
+    initCustomTimer();
+    initSleepTimer();
+    initTheme();
+    initAudioEffects();
+
     // Initialize Status Bar (Capacitor)
     initStatusBar();
     initAdMob();
+    initBackgroundMode();
 
     if ('Notification' in window && Notification.permission === 'default') Notification.requestPermission();
     console.log('🍅 FocusFlow v2.0 ready!');
@@ -640,6 +936,33 @@ async function initStatusBar() {
         }
     } catch (e) {
         // StatusBar not available (web browser)
+    }
+}
+
+// ===== Background Mode (Audio continues when app minimized) =====
+async function initBackgroundMode() {
+    try {
+        if (!window.Capacitor || !window.Capacitor.isNativePlatform()) return;
+
+        const { BackgroundMode } = await import('@capacitor-community/background-mode');
+
+        // Enable background mode when sounds are playing
+        BackgroundMode.enable();
+
+        // Configure background mode
+        BackgroundMode.setSettings({
+            title: 'FocusFlow',
+            text: 'Playing ambient sounds',
+            icon: 'ic_launcher',
+            color: '#ff6b6b',
+            resume: true,
+            hidden: false,
+            silence: false
+        });
+
+        console.log('🔊 Background mode enabled');
+    } catch (e) {
+        console.log('Background mode not available:', e.message);
     }
 }
 

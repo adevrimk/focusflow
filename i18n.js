@@ -1,4 +1,4 @@
-// ===== FocusFlow v2.0 Translations =====
+// ===== FocusFlow v2.0 Complete Translations =====
 // Supported: English, Turkish, German, Spanish, French
 
 const translations = {
@@ -17,6 +17,7 @@ const translations = {
         home: "Home",
         noise: "Noise",
         favorites: "Favorites",
+        music: "Music",
 
         // Sounds - Nature
         rain: "Rain",
@@ -56,6 +57,12 @@ const translations = {
         dryer: "Dryer",
         shower: "Shower",
 
+        // Music
+        lofi: "Lo-fi Beats",
+        jazz: "Jazz",
+        piano: "Piano",
+        chillout: "Chill",
+
         // Stats & UI
         focused: "focused",
         dayStreak: "day streak",
@@ -65,7 +72,28 @@ const translations = {
         breakTime: "Time for a break!",
         breakOver: "Break over! 💪",
         readyToFocus: "Ready to focus?",
-        footer: "Made with 💜 for focus lovers"
+        footer: "Made with 💜 for focus lovers",
+
+        // Settings
+        customTimer: "Timer",
+        sleepTimer: "Sleep",
+        theme: "Theme",
+        off: "Off",
+        min: "min",
+
+        // Sleep timer options
+        sleepOff: "Off",
+        sleep15: "15 min",
+        sleep30: "30 min",
+        sleep45: "45 min",
+        sleep60: "60 min",
+
+        // Audio Effects
+        audioEffects: "Audio Effects",
+        bass: "Bass",
+        treble: "Treble",
+        reverb: "Reverb",
+        surround: "Surround"
     },
     tr: {
         appName: "FocusFlow",
@@ -80,6 +108,7 @@ const translations = {
         home: "Ev",
         noise: "Gürültü",
         favorites: "Favoriler",
+        music: "Müzik",
 
         rain: "Yağmur",
         thunderstorm: "Fırtına",
@@ -115,6 +144,11 @@ const translations = {
         dryer: "Kurutma",
         shower: "Duş",
 
+        lofi: "Lo-fi Müzik",
+        jazz: "Caz",
+        piano: "Piyano",
+        chillout: "Rahatlatıcı",
+
         focused: "odaklanma",
         dayStreak: "gün seri",
         noFavorites: "Henüz favori yok. Eklemek için ❤️ dokun!",
@@ -123,7 +157,25 @@ const translations = {
         breakTime: "Mola zamanı!",
         breakOver: "Mola bitti! 💪",
         readyToFocus: "Odaklanmaya hazır mısın?",
-        footer: "Odaklanmayı sevenler için 💜 ile yapıldı"
+        footer: "Odaklanmayı sevenler için 💜 ile yapıldı",
+
+        customTimer: "Zamanlayıcı",
+        sleepTimer: "Uyku",
+        theme: "Tema",
+        off: "Kapalı",
+        min: "dk",
+
+        sleepOff: "Kapalı",
+        sleep15: "15 dk",
+        sleep30: "30 dk",
+        sleep45: "45 dk",
+        sleep60: "60 dk",
+
+        audioEffects: "Ses Efektleri",
+        bass: "Bas",
+        treble: "Tiz",
+        reverb: "Yankı",
+        surround: "Çevresel Ses"
     },
     de: {
         appName: "FocusFlow",
@@ -138,6 +190,7 @@ const translations = {
         home: "Zuhause",
         noise: "Rauschen",
         favorites: "Favoriten",
+        music: "Musik",
 
         rain: "Regen",
         thunderstorm: "Gewitter",
@@ -173,6 +226,11 @@ const translations = {
         dryer: "Trockner",
         shower: "Dusche",
 
+        lofi: "Lo-fi Beats",
+        jazz: "Jazz",
+        piano: "Klavier",
+        chillout: "Entspannung",
+
         focused: "fokussiert",
         dayStreak: "Tage Serie",
         noFavorites: "Noch keine Favoriten. Tippe ❤️ zum Hinzufügen!",
@@ -181,7 +239,19 @@ const translations = {
         breakTime: "Zeit für eine Pause!",
         breakOver: "Pause vorbei! 💪",
         readyToFocus: "Bereit zu fokussieren?",
-        footer: "Mit 💜 für Fokus-Liebhaber gemacht"
+        footer: "Mit 💜 für Fokus-Liebhaber gemacht",
+
+        customTimer: "Timer",
+        sleepTimer: "Schlaf",
+        theme: "Thema",
+        off: "Aus",
+        min: "Min",
+
+        sleepOff: "Aus",
+        sleep15: "15 Min",
+        sleep30: "30 Min",
+        sleep45: "45 Min",
+        sleep60: "60 Min"
     },
     es: {
         appName: "FocusFlow",
@@ -196,6 +266,7 @@ const translations = {
         home: "Hogar",
         noise: "Ruido",
         favorites: "Favoritos",
+        music: "Música",
 
         rain: "Lluvia",
         thunderstorm: "Tormenta",
@@ -231,6 +302,11 @@ const translations = {
         dryer: "Secadora",
         shower: "Ducha",
 
+        lofi: "Lo-fi Beats",
+        jazz: "Jazz",
+        piano: "Piano",
+        chillout: "Relajación",
+
         focused: "enfocado",
         dayStreak: "días racha",
         noFavorites: "Sin favoritos. ¡Toca ❤️ para añadir!",
@@ -239,7 +315,19 @@ const translations = {
         breakTime: "¡Hora del descanso!",
         breakOver: "¡Descanso terminado! 💪",
         readyToFocus: "¿Listo para enfocarte?",
-        footer: "Hecho con 💜 para amantes del enfoque"
+        footer: "Hecho con 💜 para amantes del enfoque",
+
+        customTimer: "Temporizador",
+        sleepTimer: "Dormir",
+        theme: "Tema",
+        off: "Off",
+        min: "min",
+
+        sleepOff: "Off",
+        sleep15: "15 min",
+        sleep30: "30 min",
+        sleep45: "45 min",
+        sleep60: "60 min"
     },
     fr: {
         appName: "FocusFlow",
@@ -254,6 +342,7 @@ const translations = {
         home: "Maison",
         noise: "Bruit",
         favorites: "Favoris",
+        music: "Musique",
 
         rain: "Pluie",
         thunderstorm: "Orage",
@@ -289,6 +378,11 @@ const translations = {
         dryer: "Sèche-linge",
         shower: "Douche",
 
+        lofi: "Lo-fi Beats",
+        jazz: "Jazz",
+        piano: "Piano",
+        chillout: "Détente",
+
         focused: "concentré",
         dayStreak: "jours série",
         noFavorites: "Pas de favoris. Appuyez sur ❤️ pour ajouter!",
@@ -297,7 +391,19 @@ const translations = {
         breakTime: "C'est l'heure de la pause!",
         breakOver: "Pause terminée! 💪",
         readyToFocus: "Prêt à vous concentrer?",
-        footer: "Fait avec 💜 pour les amoureux de la concentration"
+        footer: "Fait avec 💜 pour les amoureux de la concentration",
+
+        customTimer: "Minuteur",
+        sleepTimer: "Sommeil",
+        theme: "Thème",
+        off: "Off",
+        min: "min",
+
+        sleepOff: "Off",
+        sleep15: "15 min",
+        sleep30: "30 min",
+        sleep45: "45 min",
+        sleep60: "60 min"
     }
 };
 
@@ -334,6 +440,57 @@ function updateUI() {
     // Update footer
     const footer = document.querySelector('.footer p');
     if (footer) footer.textContent = t('footer');
+
+    // Update settings labels
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        if (key && t(key)) el.textContent = t(key);
+    });
+
+    // Update sleep timer options
+    const sleepSelect = document.getElementById('sleepTimerSelect');
+    if (sleepSelect) {
+        sleepSelect.options[0].textContent = t('sleepOff') || 'Off';
+        sleepSelect.options[1].textContent = t('sleep15') || '15 min';
+        sleepSelect.options[2].textContent = t('sleep30') || '30 min';
+        sleepSelect.options[3].textContent = t('sleep45') || '45 min';
+        sleepSelect.options[4].textContent = t('sleep60') || '60 min';
+    }
+
+    // Update stats display
+    updateStatsText();
+
+    // Re-render categories and sounds with translations
+    if (typeof renderCategories === 'function') renderCategories();
+    if (typeof renderSounds === 'function') renderSounds();
 }
 
-window.FocusFlowLang = { t, setLanguage, currentLang, updateUI, detectLanguage };
+function updateStatsText() {
+    const statsDisplay = document.getElementById('statsDisplay');
+    if (statsDisplay && window.state) {
+        const hours = Math.floor(window.state.totalFocusTime / 3600);
+        const mins = Math.floor((window.state.totalFocusTime % 3600) / 60);
+        statsDisplay.textContent = `${hours}h ${mins}m ${t('focused')} | 🔥 ${window.state.streak} ${t('dayStreak')}`;
+    }
+}
+
+// Get translated sound name
+function getSoundName(soundId) {
+    return t(soundId) || soundId;
+}
+
+// Get translated category name
+function getCategoryName(catId) {
+    return t(catId) || catId;
+}
+
+window.FocusFlowLang = {
+    t,
+    setLanguage,
+    currentLang,
+    updateUI,
+    detectLanguage,
+    getSoundName,
+    getCategoryName,
+    updateStatsText
+};

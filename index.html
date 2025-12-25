@@ -99,6 +99,83 @@
                 </button>
             </div>
 
+            <!-- Settings Panel -->
+            <div class="settings-panel">
+                <!-- Custom Timer -->
+                <div class="setting-row">
+                    <span class="setting-label">⏱️ <span data-i18n="customTimer">Timer</span></span>
+                    <div class="setting-control">
+                        <input type="range" id="customTimerSlider" min="5" max="60" value="25" class="timer-slider">
+                        <span id="customTimerValue" class="setting-value">25 min</span>
+                    </div>
+                </div>
+
+                <!-- Sleep Timer -->
+                <div class="setting-row">
+                    <span class="setting-label">😴 <span data-i18n="sleepTimer">Sleep</span></span>
+                    <div class="setting-control">
+                        <select id="sleepTimerSelect" class="sleep-select">
+                            <option value="0">Off</option>
+                            <option value="15">15 min</option>
+                            <option value="30">30 min</option>
+                            <option value="45">45 min</option>
+                            <option value="60">60 min</option>
+                        </select>
+                        <span id="sleepTimerStatus" class="sleep-status"></span>
+                    </div>
+                </div>
+
+                <!-- Theme Toggle -->
+                <div class="setting-row">
+                    <span class="setting-label">🎨 <span data-i18n="theme">Theme</span></span>
+                    <div class="setting-control">
+                        <button id="themeToggle" class="theme-toggle">
+                            <span class="theme-icon">🌙</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Audio Effects Panel -->
+            <div class="settings-panel audio-effects">
+                <div class="effects-header">🎛️ <span data-i18n="audioEffects">Audio Effects</span></div>
+
+                <!-- Bass -->
+                <div class="setting-row">
+                    <span class="setting-label">🔊 <span data-i18n="bass">Bass</span></span>
+                    <div class="setting-control">
+                        <input type="range" id="bassSlider" min="-12" max="12" value="0" class="eq-slider">
+                        <span id="bassValue" class="setting-value">0dB</span>
+                    </div>
+                </div>
+
+                <!-- Treble -->
+                <div class="setting-row">
+                    <span class="setting-label">🎵 <span data-i18n="treble">Treble</span></span>
+                    <div class="setting-control">
+                        <input type="range" id="trebleSlider" min="-12" max="12" value="0" class="eq-slider">
+                        <span id="trebleValue" class="setting-value">0dB</span>
+                    </div>
+                </div>
+
+                <!-- Reverb -->
+                <div class="setting-row">
+                    <span class="setting-label">🏛️ <span data-i18n="reverb">Reverb</span></span>
+                    <div class="setting-control">
+                        <input type="range" id="reverbSlider" min="0" max="1" step="0.1" value="0" class="eq-slider">
+                        <span id="reverbValue" class="setting-value">0%</span>
+                    </div>
+                </div>
+
+                <!-- Surround -->
+                <div class="setting-row">
+                    <span class="setting-label">🎧 <span data-i18n="surround">Surround</span></span>
+                    <div class="setting-control">
+                        <button id="surroundToggle" class="surround-toggle">🔇</button>
+                    </div>
+                </div>
+            </div>
+
             <!-- Category Tabs -->
             <div class="category-tabs" id="categoryTabs">
                 <!-- Rendered by JS -->
