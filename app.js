@@ -46,7 +46,7 @@ const SOUNDS = {
     pinknoise: { name: 'Pink Noise', icon: '🩷', category: 'noise', url: CDN_BASE + 'pinknoise.mp3' },
     brownnoise: { name: 'Brown Noise', icon: '🤎', category: 'noise', url: CDN_BASE + 'brownnoise.mp3' },
     static: { name: 'TV Static', icon: '📺', category: 'noise', url: CDN_BASE + 'static.mp3' },
-    dryer: { name: 'Dryer', icon: '🔄', category: 'noise', url: CDN_BASE + 'dryer.mp3' },
+    dryer: { name: 'Hair Dryer', icon: '<svg viewBox="0 0 48 48" fill="none"><path d="M11 12.14c0-.08.06-.15.14-.16l20.94-2.7C37.34 8.6 42 12.7 42 18s-4.66 9.4-9.92 8.72l-20.94-2.7a.16.16 0 01-.14-.16V12.14z" stroke="currentColor" stroke-width="3"/><path d="M11 12L4 8v20l7-4" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M38 25l-6.69 15.9a4.5 4.5 0 01-4.67 2.1 4.5 4.5 0 01-3.33-5.04L27 25" stroke="currentColor" stroke-width="3"/><circle cx="35" cy="18" r="7" fill="#ff6b6b" stroke="currentColor" stroke-width="3"/></svg>', category: 'noise', url: CDN_BASE + 'dryer.mp3', isSvg: true },
     shower: { name: 'Shower', icon: '🚿', category: 'noise', url: CDN_BASE + 'shower.mp3' }
 };
 
