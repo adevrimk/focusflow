@@ -46,7 +46,7 @@ const SOUNDS = {
     pinknoise: { name: 'Pink Noise', icon: '🩷', category: 'noise', url: CDN_BASE + 'pinknoise.mp3' },
     brownnoise: { name: 'Brown Noise', icon: '🤎', category: 'noise', url: CDN_BASE + 'brownnoise.mp3' },
     static: { name: 'TV Static', icon: '📺', category: 'noise', url: CDN_BASE + 'static.mp3' },
-    dryer: { name: 'Hair Dryer', icon: '💇', category: 'noise', url: CDN_BASE + 'dryer.mp3' },
+    dryer: { name: 'Dryer', icon: '🔄', category: 'noise', url: CDN_BASE + 'dryer.mp3' },
     shower: { name: 'Shower', icon: '🚿', category: 'noise', url: CDN_BASE + 'shower.mp3' }
 };
 
