@@ -1,17 +1,22 @@
 {
-  "appId": "com.focusflow.app",
-  "appName": "FocusFlow",
-  "webDir": "www",
-  "android": {
-    "buildOptions": {
-      "signingType": "apksigner"
+    "appId": "com.focusflow.app",
+    "appName": "FocusFlow",
+    "webDir": "www",
+    "android": {
+        "buildOptions": {
+            "signingType": "apksigner"
+        },
+        "backgroundColor": "#0f0f23"
+    },
+    "plugins": {
+        "SplashScreen": {
+            "launchShowDuration": 2000,
+            "backgroundColor": "#0f0f23",
+            "showSpinner": false
+        },
+        "StatusBar": {
+            "style": "DARK",
+            "backgroundColor": "#0f0f23"
+        }
     }
-  },
-  "plugins": {
-    "SplashScreen": {
-      "launchShowDuration": 2000,
-      "backgroundColor": "#0f0f23",
-      "showSpinner": false
-    }
-  }
 }

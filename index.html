@@ -3,9 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>FocusFlow - Pomodoro & Ambient Sounds</title>
-    <meta name="description" content="Boost your productivity with Pomodoro timer and relaxing ambient sounds">
+    <meta name="description" content="Boost your productivity with Pomodoro timer and 30 relaxing ambient sounds">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -30,19 +30,33 @@
                 <span class="logo-icon">🍅</span>
                 <span class="logo-text">FocusFlow</span>
             </div>
-            <div class="session-counter">
-                <span class="session-icon">🔥</span>
-                <span id="sessionCount">0</span> sessions
+            <div class="header-right">
+                <select id="langSelector" class="lang-selector">
+                    <option value="en">🇬🇧 EN</option>
+                    <option value="tr">🇹🇷 TR</option>
+                    <option value="de">🇩🇪 DE</option>
+                    <option value="es">🇪🇸 ES</option>
+                    <option value="fr">🇫🇷 FR</option>
+                </select>
+                <div class="session-counter">
+                    <span class="session-icon">🔥</span>
+                    <span id="sessionCount">0</span>
+                </div>
             </div>
         </header>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <span id="statsDisplay">0h 0m focused | 🔥 0 day streak</span>
+        </div>
 
         <!-- Main Timer Section -->
         <main class="main-content">
             <!-- Timer Mode Tabs -->
             <div class="timer-tabs">
                 <button class="tab-btn active" data-mode="focus">Focus</button>
-                <button class="tab-btn" data-mode="shortBreak">Short Break</button>
-                <button class="tab-btn" data-mode="longBreak">Long Break</button>
+                <button class="tab-btn" data-mode="shortBreak">Break</button>
+                <button class="tab-btn" data-mode="longBreak">Long</button>
             </div>
 
             <!-- Timer Display -->
@@ -85,51 +99,15 @@
                 </button>
             </div>
 
-            <!-- Ambient Sounds Section -->
-            <section class="sounds-section">
-                <h2 class="section-title">
-                    <span class="title-icon">🎵</span>
-                    Ambient Sounds
-                </h2>
-                <div class="sounds-grid">
-                    <div class="sound-card" data-sound="rain">
-                        <div class="sound-icon">🌧️</div>
-                        <div class="sound-name">Rain</div>
-                        <input type="range" class="volume-slider" min="0" max="100" value="50">
-                        <div class="sound-active-indicator"></div>
-                    </div>
-                    <div class="sound-card" data-sound="cafe">
-                        <div class="sound-icon">☕</div>
-                        <div class="sound-name">Café</div>
-                        <input type="range" class="volume-slider" min="0" max="100" value="50">
-                        <div class="sound-active-indicator"></div>
-                    </div>
-                    <div class="sound-card" data-sound="forest">
-                        <div class="sound-icon">🌲</div>
-                        <div class="sound-name">Forest</div>
-                        <input type="range" class="volume-slider" min="0" max="100" value="50">
-                        <div class="sound-active-indicator"></div>
-                    </div>
-                    <div class="sound-card" data-sound="ocean">
-                        <div class="sound-icon">🌊</div>
-                        <div class="sound-name">Ocean</div>
-                        <input type="range" class="volume-slider" min="0" max="100" value="50">
-                        <div class="sound-active-indicator"></div>
-                    </div>
-                    <div class="sound-card" data-sound="fire">
-                        <div class="sound-icon">🔥</div>
-                        <div class="sound-name">Fireplace</div>
-                        <input type="range" class="volume-slider" min="0" max="100" value="50">
-                        <div class="sound-active-indicator"></div>
-                    </div>
-                    <div class="sound-card" data-sound="wind">
-                        <div class="sound-icon">💨</div>
-                        <div class="sound-name">Wind</div>
-                        <input type="range" class="volume-slider" min="0" max="100" value="50">
-                        <div class="sound-active-indicator"></div>
-                    </div>
-                </div>
-            </section>
+            <!-- Category Tabs -->
+            <div class="category-tabs" id="categoryTabs">
+                <!-- Rendered by JS -->
+            </div>
+
+            <!-- Sounds Grid -->
+            <div class="sounds-grid" id="soundsGrid">
+                <!-- Rendered by JS -->
+            </div>
         </main>
 
         <!-- Footer -->
@@ -142,6 +120,7 @@
         <source src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" type="audio/mpeg">
     </audio>
 
+    <script src="i18n.js"></script>
     <script src="app.js"></script>
 </body>
 
