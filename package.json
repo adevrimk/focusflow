@@ -1,0 +1,25 @@
+{
+    "name": "focusflow",
+    "version": "1.0.0",
+    "description": "Pomodoro Timer with Ambient Sounds",
+    "main": "index.html",
+    "scripts": {
+        "build": "echo 'Static site - no build needed'"
+    },
+    "keywords": [
+        "pomodoro",
+        "timer",
+        "ambient",
+        "focus",
+        "productivity"
+    ],
+    "author": "FocusFlow",
+    "license": "MIT",
+    "dependencies": {
+        "@capacitor/android": "^6.0.0",
+        "@capacitor/core": "^6.0.0"
+    },
+    "devDependencies": {
+        "@capacitor/cli": "^6.0.0"
+    }
+}
