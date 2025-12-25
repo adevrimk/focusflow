@@ -41,24 +41,8 @@ jobs:
 
     - name: Fix capacitor config
       run: |
-        cat > capacitor.config.json << 'EOF'
-        {
-          "appId": "com.focusflow.app",
-          "appName": "FocusFlow",
-          "webDir": "dist",
-          "android": {
-            "buildOptions": {
-              "signingType": "apksigner"
-            }
-          },
-          "plugins": {
-            "StatusBar": {
-              "style": "DARK",
-              "backgroundColor": "#0f0f23"
-            }
-          }
-        }
-        EOF
+        rm -f capacitor.config.ts
+        echo '{"appId":"com.focusflow.app","appName":"FocusFlow","webDir":"dist","android":{"buildOptions":{"signingType":"apksigner"}},"plugins":{"StatusBar":{"style":"DARK","backgroundColor":"#0f0f23"}}}' > capacitor.config.json
         cat capacitor.config.json
 
     - name: Add Android platform
