@@ -38,6 +38,13 @@ jobs:
         cp app.js dist/
         cp i18n.js dist/
         cp manifest.json dist/ || true
+        echo "Files in dist:"
+        ls -la dist/
+
+    - name: Verify capacitor config
+      run: |
+        echo "Capacitor config:"
+        cat capacitor.config.json
 
     - name: Add Android platform
       run: npx cap add android
