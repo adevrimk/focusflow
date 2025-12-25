@@ -1,7 +1,7 @@
 {
   "appId": "com.focusflow.app",
   "appName": "FocusFlow",
-  "webDir": ".",
+  "webDir": "www",
   "android": {
     "buildOptions": {
       "signingType": "apksigner"
