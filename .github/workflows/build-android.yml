@@ -38,12 +38,27 @@ jobs:
         cp app.js dist/
         cp i18n.js dist/
         cp manifest.json dist/ || true
-        echo "Files in dist:"
-        ls -la dist/
 
-    - name: Verify capacitor config
+    - name: Fix capacitor config
       run: |
-        echo "Capacitor config:"
+        cat > capacitor.config.json << 'EOF'
+        {
+          "appId": "com.focusflow.app",
+          "appName": "FocusFlow",
+          "webDir": "dist",
+          "android": {
+            "buildOptions": {
+              "signingType": "apksigner"
+            }
+          },
+          "plugins": {
+            "StatusBar": {
+              "style": "DARK",
+              "backgroundColor": "#0f0f23"
+            }
+          }
+        }
+        EOF
         cat capacitor.config.json
 
     - name: Add Android platform
@@ -62,18 +77,8 @@ jobs:
       working-directory: android
       run: ./gradlew assembleDebug
 
-    - name: Build Release APK
-      working-directory: android
-      run: ./gradlew assembleRelease
-
     - name: Upload Debug APK
       uses: actions/upload-artifact@v4
       with:
         name: focusflow-debug
         path: android/app/build/outputs/apk/debug/app-debug.apk
-
-    - name: Upload Release APK
-      uses: actions/upload-artifact@v4
-      with:
-        name: focusflow-release
-        path: android/app/build/outputs/apk/release/app-release-unsigned.apk
