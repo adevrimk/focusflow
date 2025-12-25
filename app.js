@@ -134,6 +134,9 @@ function timerComplete() {
         updateStreak();
         showNotification('Focus complete! 🎉', 'Time for a break!');
         switchMode(state.sessionCount % 4 === 0 ? 'longBreak' : 'shortBreak');
+
+        // Show interstitial ad every 2 sessions
+        maybeShowInterstitial();
     } else {
         showNotification('Break over! 💪', 'Ready to focus?');
         switchMode('focus');
@@ -613,6 +616,7 @@ function init() {
 
     // Initialize Status Bar (Capacitor)
     initStatusBar();
+    initAdMob();
 
     if ('Notification' in window && Notification.permission === 'default') Notification.requestPermission();
     console.log('🍅 FocusFlow v2.0 ready!');
@@ -631,5 +635,156 @@ async function initStatusBar() {
     }
 }
 
+// ===== AdMob Integration =====
+// AdMob App ID: ca-app-pub-1214355369421942~4507221566
+const ADMOB_CONFIG = {
+    // Test IDs (for development)
+    testBannerId: 'ca-app-pub-3940256099942544/6300978111',
+    testInterstitialId: 'ca-app-pub-3940256099942544/1033173712',
+    testRewardedId: 'ca-app-pub-3940256099942544/5224354917',
+
+    // REAL IDs - Your AdMob account
+    bannerId: 'ca-app-pub-1214355369421942/7019487224',
+    interstitialId: 'ca-app-pub-1214355369421942/5620992689',
+    rewardedId: 'ca-app-pub-1214355369421942/3630906554',           // Ödüllü reklam
+    rewardedInterstitialId: 'ca-app-pub-1214355369421942/4943988228', // Ödüllü geçiş
+    nativeId: 'ca-app-pub-1214355369421942/8929682305',             // Yerel gelişmiş
+    appOpenId: 'ca-app-pub-1214355369421942/3080242211',            // Uygulama açıkken
+
+    useTestAds: false  // Set to true for testing, false for production
+};
+
+let admobInitialized = false;
+let interstitialLoaded = false;
+let rewardedLoaded = false;
+
+async function initAdMob() {
+    try {
+        if (!window.Capacitor || !window.Capacitor.isNativePlatform()) return;
+
+        const { AdMob, BannerAdSize, BannerAdPosition } = await import('@capacitor-community/admob');
+
+        // Initialize AdMob
+        await AdMob.initialize({
+            initializeForTesting: ADMOB_CONFIG.useTestAds
+        });
+
+        admobInitialized = true;
+
+        // Show banner ad at bottom
+        await AdMob.showBanner({
+            adId: ADMOB_CONFIG.useTestAds ? ADMOB_CONFIG.testBannerId : ADMOB_CONFIG.bannerId,
+            adSize: BannerAdSize.ADAPTIVE_BANNER,
+            position: BannerAdPosition.BOTTOM_CENTER,
+            margin: 0
+        });
+
+        // Prepare interstitial for between sessions
+        await prepareInterstitial();
+
+        console.log('📢 AdMob initialized');
+    } catch (e) {
+        console.log('AdMob not available:', e.message);
+    }
+}
+
+async function prepareInterstitial() {
+    try {
+        if (!admobInitialized) return;
+
+        const { AdMob } = await import('@capacitor-community/admob');
+
+        await AdMob.prepareInterstitial({
+            adId: ADMOB_CONFIG.useTestAds ? ADMOB_CONFIG.testInterstitialId : ADMOB_CONFIG.interstitialId
+        });
+
+        interstitialLoaded = true;
+    } catch (e) {
+        console.log('Interstitial prep failed:', e.message);
+    }
+}
+
+async function showInterstitial() {
+    try {
+        if (!admobInitialized || !interstitialLoaded) return;
+
+        const { AdMob } = await import('@capacitor-community/admob');
+
+        await AdMob.showInterstitial();
+        interstitialLoaded = false;
+
+        // Prepare next interstitial
+        setTimeout(() => prepareInterstitial(), 1000);
+    } catch (e) {
+        console.log('Interstitial show failed:', e.message);
+    }
+}
+
+// Call this after every 2 pomodoro sessions
+function maybeShowInterstitial() {
+    if (state.sessionCount > 0 && state.sessionCount % 2 === 0) {
+        showInterstitial();
+    }
+}
+
+// ===== Rewarded Video Ads =====
+async function prepareRewarded() {
+    try {
+        if (!admobInitialized) return;
+
+        const { AdMob } = await import('@capacitor-community/admob');
+
+        await AdMob.prepareRewardVideoAd({
+            adId: ADMOB_CONFIG.useTestAds ? ADMOB_CONFIG.testRewardedId : ADMOB_CONFIG.rewardedId
+        });
+
+        rewardedLoaded = true;
+    } catch (e) {
+        console.log('Rewarded prep failed:', e.message);
+    }
+}
+
+// Show rewarded ad - user watches video for bonus (e.g., extra focus time, unlock sound)
+async function showRewardedAd(onReward) {
+    try {
+        if (!admobInitialized || !rewardedLoaded) {
+            console.log('Rewarded ad not ready');
+            return false;
+        }
+
+        const { AdMob } = await import('@capacitor-community/admob');
+
+        // Listen for reward
+        AdMob.addListener('onRewardedVideoAdReward', (reward) => {
+            console.log('User earned reward:', reward);
+            if (onReward) onReward(reward);
+        });
+
+        await AdMob.showRewardVideoAd();
+        rewardedLoaded = false;
+
+        // Prepare next rewarded ad
+        setTimeout(() => prepareRewarded(), 1000);
+
+        return true;
+    } catch (e) {
+        console.log('Rewarded show failed:', e.message);
+        return false;
+    }
+}
+
+// Example: Watch ad to get bonus session
+function watchAdForBonus() {
+    showRewardedAd((reward) => {
+        // Give user a bonus - e.g., +1 session count
+        state.sessionCount++;
+        localStorage.setItem('focusflow_sessions', state.sessionCount.toString());
+        elements.sessionCount.textContent = state.sessionCount;
+        showNotification('Bonus! 🎁', 'You earned +1 session!');
+    });
+}
+
 document.addEventListener('DOMContentLoaded', init);
+
+
 
