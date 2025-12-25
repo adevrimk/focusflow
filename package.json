@@ -19,8 +19,7 @@
         "@capacitor/android": "^6.0.0",
         "@capacitor/core": "^6.0.0",
         "@capacitor/status-bar": "^6.0.0",
-        "@capacitor-community/admob": "^6.0.0",
-        "@capacitor-community/background-mode": "^5.0.0"
+        "@capacitor-community/admob": "^6.0.0"
     },
     "devDependencies": {
         "@capacitor/cli": "^6.0.0"
