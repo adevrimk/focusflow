@@ -451,7 +451,7 @@ function updateEQDisplay() {
 }
 
 function initAudioEffects() {
-    initAudioContext();
+    // Don't auto-init AudioContext - requires user interaction
 
     // Bass slider
     const bassSlider = document.getElementById('bassSlider');
@@ -939,31 +939,11 @@ async function initStatusBar() {
     }
 }
 
-// ===== Background Mode (Audio continues when app minimized) =====
+// ===== Background Mode (disabled - plugin not available) =====
 async function initBackgroundMode() {
-    try {
-        if (!window.Capacitor || !window.Capacitor.isNativePlatform()) return;
-
-        const { BackgroundMode } = await import('@capacitor-community/background-mode');
-
-        // Enable background mode when sounds are playing
-        BackgroundMode.enable();
-
-        // Configure background mode
-        BackgroundMode.setSettings({
-            title: 'FocusFlow',
-            text: 'Playing ambient sounds',
-            icon: 'ic_launcher',
-            color: '#ff6b6b',
-            resume: true,
-            hidden: false,
-            silence: false
-        });
-
-        console.log('🔊 Background mode enabled');
-    } catch (e) {
-        console.log('Background mode not available:', e.message);
-    }
+    // Background mode plugin not available in this version
+    // Audio will continue playing using HTML5 Audio
+    console.log('ℹ️ Background mode: Using HTML5 Audio fallback');
 }
 
 // ===== AdMob Integration =====
